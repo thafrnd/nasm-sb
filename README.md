@@ -52,3 +52,11 @@ Para a visualização da interface pelo terminal:
 ```
 layout asm
 ```
+Para executar a próxima linha durante a execução do GDB, use o comando `step`: 
+```
+step  # ou s
+```
+Para o próximo breakpoint, ou até o fim da execução, caso não hajam mais breakpoints, use o comando a seguir:
+```
+continue  # ou c
+```
