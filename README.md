@@ -54,9 +54,31 @@ layout asm
 ```
 Para executar a próxima linha durante a execução do GDB, use o comando `step`: 
 ```
-step  # ou s
+step 
 ```
 Para o próximo breakpoint, ou até o fim da execução, caso não hajam mais breakpoints, use o comando a seguir:
 ```
-continue  # ou c
+continue 
 ```
+### Conteúdo dos registradores
+Para visualizar os registradores, basta usar o comando:
+```
+layout regs
+```
+
+### Conteúdo da memória
+Para ver o conteúdo da memória, primeiro, é necessário listar as variáveis definidas:
+```
+i var
+```
+Em sequencia, é necessário usar o comando `x` com os parâmetros do tamanho e do tipo de dado na forma:
+```
+x/<tam><tipo> &<endereço> #ou &<var> 
+```
+Então, para ver o conteúdo no endereço 0x2000, por exemplo:
+```
+x/s &0x2000
+```
+### Finalizar o GDB
+Por fim, para Finalizar o debugger, e preciso usar o comando `quit` ou `q`.
+Para mais detalhes do funcionamento do debugger GDB, consulte o [manual do programa](http://www.gnu.org/software/gdb/documentation/), ou execute o comando`man gdb` ou utilize o comando `help` durante a execução.
