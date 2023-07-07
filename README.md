@@ -37,3 +37,18 @@ nasm -f elf64 -o exemplo.o exemplo.asm
 ld exemplo.o -o exemplo
 ```
 Após compilar o programa em Assembly, rode o GDB:
+```
+gdb -q exemplo
+```
+Os breakpoints são definidos usando o comando `break` ou `b`. Para gerar um breakpoint em uma label ou linha, use o seguinte comando:
+```
+break <linha>   # ou break <nome-da-label> 
+```
+Após definição dos breakpoints, execute o programa com o comando: 
+```
+run
+```
+Para a visualização da interface pelo terminal:
+```
+layout asm
+```
