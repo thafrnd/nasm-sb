@@ -1,6 +1,20 @@
 # nasm-sb
 Repositório de NASM para a disciplina de software 
 
+# Integrantes G1
+
+180076272 - Jonas de Souza Fagundes
+
+190031891 - Kayran Vieira de Oliveira
+
+200043722 - Thais Fernanda de Castro Garcia
+
+190034084 - Marcus Vinicius Oliveira de Abrantes
+
+160125260 - Ingrid Lorraine Rodrigues da Silva
+
+190126892 - Thiago Elias dos Reis
+
 # NASM
 Repositório de duas tarefas:
 
