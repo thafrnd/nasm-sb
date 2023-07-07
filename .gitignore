@@ -1,0 +1,9 @@
+# IDE
+.vscode
+
+# Object files
+*.o
+/build
+
+# Executables
+run
