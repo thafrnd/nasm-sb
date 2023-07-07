@@ -23,3 +23,9 @@ Pré-processador:
   
 Montador NASM:
 - 1 - Exemplifique como debugar um programa em NASM usando um software de debug
+
+## Baixando o GDB
+Para baixar o GDB em distribuições Debian/Ubuntu:
+```
+sudo apt-get install gdb
+```
