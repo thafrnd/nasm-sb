@@ -29,3 +29,11 @@ Para baixar o GDB em distribuições Debian/Ubuntu:
 ```
 sudo apt-get install gdb
 ```
+## Debug utilizando o GDB
+
+Criando um executável do programa:
+```
+nasm -f elf64 -o exemplo.o exemplo.asm
+ld -o exemplo exemplo.o     # ou gcc -o exemplo exemplo.o 
+```
+Após compilar o programa em Assembly, rode o GDB:
