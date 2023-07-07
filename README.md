@@ -34,6 +34,6 @@ sudo apt-get install gdb
 Criando um executável do programa:
 ```
 nasm -f elf64 -o exemplo.o exemplo.asm
-ld -o exemplo exemplo.o     # ou gcc -o exemplo exemplo.o 
+ld exemplo.o -o exemplo
 ```
 Após compilar o programa em Assembly, rode o GDB:
