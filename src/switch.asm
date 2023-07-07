@@ -1,123 +1,98 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; UnB - Brasilia - Brasil                        ;
-; Abril - 2022                                   ;
-;                                                ;
-; Simulacao do Switch Case usando macros em NASM ;
-;                                                ;
-; Arthur Augusto Pinto Cunha - 160113008         ;
-; Cintia Leal Rodrigues - 170125696              ;
-; Gustavo Tomas de Paula - 190014148             ;
-; Luiz Carlos Schonarth Junior - 190055171       ;
-; Rafael Henrique Nogalha de Lima - 190036966    ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SYS_EXIT equ 60;
+Jack    EQU 1
+Queen   EQU 2
+King    EQU 3
 
-; Forma do switch:
-; SWITCH
-;       CASE 1
-;           ; faz alguma coisa
-;           BREAK 
-;       ...
-;       ...
-;       CASE N
-;           ; faz outra coisa
-;           BREAK
-;       DEFAULT
-;           ; faz aquela coisa
-;           BREAK
-; ENDSWITCH
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; O switch verifica se algum case casa com o valor do registrador "ebx".   ;
-; Se for bem sucedido, executa o codigo do case e depois encerra o switch. ;
-; Caso contrario, executa o codigo no caso default e depois encerra.       ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-%macro SWITCH 0         
-    %push   SWITCH      ; Salva o contexto
-    %assign %$case 0    ; Atribui 0 ao case inicial 
+%macro return 0
+mov       rax, SYS_EXIT           ; system call for exit
+xor       rdi, rdi                ; exit code 0 
+syscall
 %endmacro
 
-%macro ENDSWITCH 0      
-    endswitch:          
-    %pop    SWITCH      ; Remove da pilha o contexto do switch
+%macro print_int 1
+    mov rax, %1
+    call _printRAXDigit
+%endmacro
+
+%macro SWITCH 1
+%push switch            
+%assign next 1
+    mov rax, %1
+    jmp %$loc %+ next
 %endmacro
 
 %macro CASE 1
-    %ifctx SWITCH       ; Verifica se o contexto for o switch
-        L%$case:
-            %assign %$case %$case+1     ; Atribui case = case + 1 apos label L$case
-            cmp     ebx, %1             ; Compara o valor do reg ecx ao valor passado como argumento
-            jne     L%$case             ; Pula para o proximo CASE caso a comparacao de errado
-    %endif
+%ifctx switch
+    %$loc %+ next:
+    %assign next next+1
+    mov rbx, %1
+    cmp rax, rbx
+    jne %$loc %+ next
+%endif
 %endmacro
 
 %macro DEFAULT 0
-    %ifctx SWITCH       ; Verifica o contexto do switch
-        L%$case:        ; Label para case DEFAULT, sempre deve ser a ultima
-    %endif
+%ifctx switch
+    %$loc %+ next:
+%endif
 %endmacro
 
 %macro BREAK 0
-    %ifctx SWITCH       ; Verifica o contexto do switch
-        jmp endswitch   ; Pula para o fim do switch 
+    jmp %$endswitch
+%endmacro
+
+%macro ENDSWITCH 0
+    %ifctx switch
+    %$endswitch:
+    %pop
     %endif
 %endmacro
 
-; Macros auxiliares
-%macro print 1
-    push dword %1   ; Push na stack com o valor armazenado no registrador passado como argumento 
-    push message    ; Push na stack da mensagem declarada na secao de dados
-    call printf     ; Chama funcao printf C
-    add esp, 8      ; Reinicia ponteiro para a stack
-%endmacro
+global    _start
+section   .text
+_start:
+    ;CODE HERE
+    mov rdx, 3
 
-%macro print_not_found 0
-    push not_found  ; Push na stack da mensagem de erro declarada na secao de dados
-    call printf     ; Chama funcao printf C
-    add esp, 4      ; Reinicia o ponteiro para a stack
-%endmacro
+   SWITCH card
+   CASE Jack
+       add rdx, Jack
+       BREAK
+   CASE Queen
+       add rdx, Queen
+       BREAK
+   CASE King
+       add rdx, King
+       BREAK
+   DEFAULT
+       add rdx, [card]
+   ENDSWITCH
 
-extern printf, exit
-global main
+    print_int rdx
+    return
 
-section .data
-message db "Match: %d", 10, 0  ;10,  mensagem a ser mostrada no case
-not_found db "Sem match - O numero e par", 10, 0
-section .text
+_printRAXDigit:
+    push rax
+    push rdi
+    push rsi
+    push rdx
 
-main:
+    add rax, 48
+    mov [digit], al
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, digit
+    mov rdx, 2
+    syscall
 
-mov ebx, -1  ; Inicializa o contador
-loop:
-    add ebx, 1      ; Incrementa contador
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+    ret
 
-    SWITCH
-        CASE 1
-            mov eax, 1
-            print eax
-            BREAK
-        CASE 3
-            mov eax, 3
-            print eax
-            BREAK
-        CASE 5
-            mov eax, 5
-            print eax
-            BREAK
-        CASE 7
-            mov eax, 7
-            print eax
-            BREAK
-        CASE 9
-            mov eax, 9
-            print eax
-            BREAK
-        DEFAULT
-            print_not_found
-            BREAK
-    ENDSWITCH
-
-    cmp ebx, 10     ; Compara contador com N
-    jne loop        ; Goto label loop caso a comparacao nao de certo
-
-call exit
+section   .data
+card    db  2   ;card_variable
+message:  db        "Hello, World", 10      ; note the newline at the end
+digit: db 0,10
