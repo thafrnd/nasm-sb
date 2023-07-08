@@ -1,5 +1,5 @@
 section .data
-        msg db "Boa noite.", 10
+        msg db "String de exemplo.", 10
         tam EQU $-msg
 section .text 
 	global _start 
