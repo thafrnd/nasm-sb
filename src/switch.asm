@@ -1,83 +1,66 @@
-SYS_EXIT equ 60;
-Jack    EQU 1
-Queen   EQU 2
-King    EQU 3
+V1    EQU 1                         ;constante 1
+V2    EQU 2                         ;constante 2
+V3    EQU 3                         ;constante 3
+V4    EQU 4                         ;constante 3
 
-
-%macro return 0
-mov       rax, SYS_EXIT           ; system call for exit
-xor       rdi, rdi                ; exit code 0 
-syscall
+%macro SWITCH 1                     ;switch com 1 argumento
+    mov rax, %1                     ;valor a ser comparado em rax
+    %push switch                    ;contexto switch
+    %assign next 1                  ;valor 1 (inicial) em next
+    jmp %$caso %+ next              ;jump para label local caso1
 %endmacro
 
-%macro print_int 1
-    mov rax, %1
-    call _printRAXDigit
-%endmacro
-
-%macro SWITCH 1
-%push switch            
-%assign next 1
-    mov rax, %1
-    jmp %$loc %+ next
-%endmacro
-
-%macro CASE 1
-%ifctx switch
-    %$loc %+ next:
-    %assign next next+1
-    mov rbx, %1
-    cmp rax, rbx
-    jne %$loc %+ next
+%macro CASE 1                       ;case com 1 argumento
+%ifctx switch                       ;se no contexto swich
+    %$caso %+ next:                 ;label com caso atual
+    %assign next next+1             ;next próximo case
+    mov rbx, %1                     ;case a ser comparado
+    cmp rax, rbx                    ;compara o valor (que foi armazenado em switch) com argumento do case
+    jne %$caso %+ next               ;se não for igual, próximo case
 %endif
 %endmacro
 
-%macro DEFAULT 0
-%ifctx switch
-    %$loc %+ next:
+%macro DEFAULT 0                    ;default sem argumento
+%ifctx switch                       ;se no contexto switch
+    %$caso %+ next:                 ;label final
 %endif
 %endmacro
 
-%macro BREAK 0
-    jmp %$endswitch
+%macro BREAK 0                      ;break sem argumento
+    jmp %$endswitch                 ;pula para endswitch local
 %endmacro
 
-%macro ENDSWITCH 0
-    %ifctx switch
-    %$endswitch:
-    %pop
+%macro ENDSWITCH 0                  ;endswitch sem argumentos
+    %ifctx switch                   ;se no contexto switch
+    %$endswitch:                    ;label local endswitch
+    %pop                            ;finaliza contexto switch
     %endif
 %endmacro
+
+section   .data
+valor:   db  2   ;valor_variable 
+digit:  db 0,10
 
 global    _start
 section   .text
 _start:
-    ;CODE HERE
-    mov rdx, 3
+    mov rdx, 1                      ;valor inicial a ser somado
 
-   SWITCH card
-   CASE Jack
-       add rdx, Jack
-       BREAK
-   CASE Queen
-       add rdx, Queen
-       BREAK
-   CASE King
-       add rdx, King
-       BREAK
-   DEFAULT
-       add rdx, [card]
-   ENDSWITCH
+    SWITCH 3                        ;switch 2
+    CASE V1                         ;case 1
+        add rdx, V1                 ;soma V1 a 3
+        BREAK                        
+    CASE V2                         ;case 2
+        add rdx, V2                 ;soma V2 a 3
+        BREAK        
+    CASE V3                         ;case 3
+        add rdx, V3                 ;soma V3 a 3
+        BREAK
+    DEFAULT
+        add rdx, V4                 ;soma V4 a 
+    ENDSWITCH
 
-    print_int rdx
-    return
-
-_printRAXDigit:
-    push rax
-    push rdi
-    push rsi
-    push rdx
-
+    mov rax, rdx                      
     add rax, 48
     mov [digit], al
     mov rax, 1
@@ -86,13 +69,7 @@ _printRAXDigit:
     mov rdx, 2
     syscall
 
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
-    ret
+    mov rax, 60                     ; syscall exit
+    mov rdi, 0                      ; exit 0 
+    syscall
 
-section   .data
-card    db  2   ;card_variable
-message:  db        "Hello, World", 10      ; note the newline at the end
-digit: db 0,10
