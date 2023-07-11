@@ -9,13 +9,15 @@ Integrantes G1
 
 Tarefas escolhidas e apresentadas:
 
-PrÈ-processador:
+Pr√©-processador:
 2 - Construa macros para simular o comando switch em C
 
 Montador NASM:
 1 - Exemplifique como debugar um programa em NASM usando um software de debug
 
-DescriÁ„o do trabalho feito por cada membro do grupo:
+Descri√ß√£o do trabalho feito por cada membro do grupo:
 
-190126892 - Thiago Elias dos Reis: Pesquisa e apresentaÁ„o do debug GDB, confecÁ„o do arquivo exemplo.asm, 
-ApresntaÁ„o_GDB.pdf e README.md alÈm de pesquisa sobre cÛdigos NASM para auxÌlio do desenvolvimento do switch.asm.
+190126892 - Thiago Elias dos Reis: Pesquisa e apresenta√ß√£o do debug GDB, confec√ß√£o do arquivo exemplo.asm, 
+Apresnta√ß√£o_GDB.pdf e README.md al√©m de pesquisa sobre c√≥digos NASM para aux√≠lio do desenvolvimento do switch.asm.
+
+190031891 - Kayran Vieira de Oliveira: Slides e ajuda no roteiro do debug GDB, ajuda no exemplo.asm, pesquisa e aux√≠lio no c√≥digo switch.
