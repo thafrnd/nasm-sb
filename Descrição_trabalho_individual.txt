@@ -21,3 +21,5 @@ Descrição do trabalho feito por cada membro do grupo:
 Apresntação_GDB.pdf e README.md além de pesquisa sobre códigos NASM para auxílio do desenvolvimento do switch.asm.
 
 190031891 - Kayran Vieira de Oliveira: Slides e ajuda no roteiro do debug GDB, ajuda no exemplo.asm, pesquisa e auxílio no código switch.
+
+190034084 - Marcus Vicius Oliveira de Abrantes: Pesquisa do gdb, pesquisa e codificação do switch.
